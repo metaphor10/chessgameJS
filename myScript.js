@@ -332,8 +332,8 @@ function drawRect()
 	colorOfSquare=false;
 	var colorOfPiece1 = new Boolean();
 	colorOfPiece1=false;
-	document.getElementById('svgOne').setAttribute('width',800);
-	document.getElementById('svgOne').setAttribute('height',800);
+	document.getElementById('svgOne').setAttribute('width', window.innerHeight-100);
+	document.getElementById('svgOne').setAttribute('height',window.innerHeight- 100);
 	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height')-2)/(numberOfSquares));
 	console.log(sizeOfSquare);
 	/*var c=document.getElementById("svgOne");
