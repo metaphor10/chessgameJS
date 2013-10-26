@@ -58,8 +58,8 @@ Piece.prototype.drawPiece = function(x,y)
 	
 	var try12 = document.createElementNS(svgns, 'image');
    console.log("after var try12");
-   	try12.setAttributeNS(null,'x', this.locationY*sizeOfSquare);
-   	try12.setAttributeNS(null,'y', this.locationX*sizeOfSquare);
+   	try12.setAttributeNS(null,'x', Math.floor(this.locationY*sizeOfSquare));
+   	try12.setAttributeNS(null,'y', Math.floor(this.locationX*sizeOfSquare));
    	
    	try12.setAttributeNS('http://www.w3.org/1999/xlink','href', this.imageOfPiece.src);
    	try12.setAttributeNS(null, 'height', sizeOfSquare);
@@ -334,7 +334,7 @@ function drawRect()
 	colorOfPiece1=false;
 	document.getElementById('svgOne').setAttribute('width',800);
 	document.getElementById('svgOne').setAttribute('height',800);
-	sizeOfSquare=Math.round(Math.floor(document.getElementById('svgOne').getAttribute('height')/(numberOfSquares)));
+	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height')-2)/(numberOfSquares));
 	console.log(sizeOfSquare);
 	/*var c=document.getElementById("svgOne");
 	var ctx=c.getContext("2d");*/
@@ -390,10 +390,11 @@ for (var x = 0; x < numberOfSquares; x++) {
   		console.log("red" );
   		colorOfSquare=true;
   	}	
-  	
+  	console.log('size of square' + sizeOfSquare)
     for (var y = 0; y < numberOfSquares; y++) {
     	if (colorOfSquare==true)
     		{
+    			
     			var rect = document.createElementNS(svgns, 'rect');
         		rect.setAttributeNS(null, 'x', Math.floor(x*sizeOfSquare));
         		rect.setAttributeNS(null, 'y', Math.floor(y*sizeOfSquare));
