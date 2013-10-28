@@ -5,17 +5,17 @@ function ListenerClick(evt)
 	//alert(evt.clientX + ':' + evt.clientY);
 	if (!choosingAPiece)
 	{
-		xStartDrag=evt.pageX ;
-		xEndDrag1= evt.screenX;
-		yStartDrag1=evt.clientY;
-		xStartDrag1=evt.clientX;
-		yStartDrag=evt.pageY;
+		
+		
+		yStartDrag=evt.clientY;
+		xStartDrag=evt.clientX;
+		
 		choosingAPiece=true;
 	}else
 	{
-		xEndDrag=evt.pageX;
-		yEndDrag=evt.pageY;
-		alert('startx '+ xStartDrag +' '+ xStartDrag1+ ' '+ xEndDrag1+ ' '+ yStartDrag1 +'sizeOfSquare '+ sizeOfSquare +'='+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
+		xEndDrag=evt.clientX;
+		yEndDrag=evt.clientY;
+		alert('startx '+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
 		choosingAPiece=false;
 	}
 	
@@ -25,10 +25,10 @@ var choosingAPiece= new Boolean();
 choosingAPiece=false;
 var xEndDrag;
 var yStartDrag;
-var xStartDrag1
-var xEndDrag1;
-var yStartDrag1;
-var yEndDrag1;
+
+
+
+
 var yEndDrag;
 function ListenerDragLeave(evt)
 {
@@ -453,8 +453,7 @@ for (var x = 0; x < numberOfSquares; x++) {
    }
    
    //document.getElementById('svgOne').addEventListener("ondragstart",function(evt){xStartDrag=evt.clientX},false);
- var h = document.getElementById('svgOne').clientHeight;
- alert(h);
+ 
    document.getElementById('svgOne').addEventListener("click",ListenerClick,false);
    
    
