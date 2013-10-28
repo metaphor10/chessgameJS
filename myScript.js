@@ -1,17 +1,21 @@
 /*https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript */
 function ListenerClick(evt)
 {
+	
 	//alert(evt.clientX + ':' + evt.clientY);
 	if (!choosingAPiece)
 	{
-		xStartDrag=evt.clientX;
-		yStartDrag=evt.clientY;
+		xStartDrag=evt.pageX ;
+		xEndDrag1= evt.screenX;
+		yStartDrag1=evt.clientY;
+		xStartDrag1=evt.clientX;
+		yStartDrag=evt.pageY;
 		choosingAPiece=true;
 	}else
 	{
-		xEndDrag=evt.clientX;
-		yEndDrag=evt.clientY;
-		alert('startx '+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
+		xEndDrag=evt.pageX;
+		yEndDrag=evt.pageY;
+		alert('startx '+ xStartDrag +' '+ xStartDrag1+ ' '+ xEndDrag1+ ' '+ yStartDrag1 +'sizeOfSquare '+ sizeOfSquare +'='+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
 		choosingAPiece=false;
 	}
 	
@@ -21,6 +25,10 @@ var choosingAPiece= new Boolean();
 choosingAPiece=false;
 var xEndDrag;
 var yStartDrag;
+var xStartDrag1
+var xEndDrag1;
+var yStartDrag1;
+var yEndDrag1;
 var yEndDrag;
 function ListenerDragLeave(evt)
 {
@@ -332,16 +340,19 @@ function drawRect()
 	colorOfSquare=false;
 	var colorOfPiece1 = new Boolean();
 	colorOfPiece1=false;
-	document.getElementById('svgOne').setAttribute('width', window.innerHeight-100);
-	document.getElementById('svgOne').setAttribute('height',window.innerHeight- 100);
-	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height')-2)/(numberOfSquares));
+	document.getElementById('svgOne').setAttribute('width', window.innerHeight);
+	document.getElementById('svgOne').setAttribute('height',window.innerHeight);
+	
+	
+	
+	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height'))/(numberOfSquares));
 	console.log(sizeOfSquare);
 	/*var c=document.getElementById("svgOne");
 	var ctx=c.getContext("2d");*/
 	/*ctx.canvas.width  = window.innerWidth;
   	ctx.canvas.height = window.innerHeight ;*/
 		
-  	
+  	alert(document.getElementById('svgOne').getAttribute('height'));
   	
   	positions[0][0] = new Rook(colorOfPiece1);
   	positions[0][1] = new Bishop(colorOfPiece1);
@@ -442,6 +453,8 @@ for (var x = 0; x < numberOfSquares; x++) {
    }
    
    //document.getElementById('svgOne').addEventListener("ondragstart",function(evt){xStartDrag=evt.clientX},false);
+ var h = document.getElementById('svgOne').clientHeight;
+ alert(h);
    document.getElementById('svgOne').addEventListener("click",ListenerClick,false);
    
    
