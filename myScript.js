@@ -16,6 +16,22 @@ function ListenerClick(evt)
 		xEndDrag=evt.clientX;
 		yEndDrag=evt.clientY;
 		alert('startx '+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
+		temp=positions[0][1];
+		positions[0][1]=undefined; 
+		positions[3].splice(1,1, temp);
+		drawBoard();
+		
+		
+		
+		/*for (var i=65;i<childNodeArray.length;i++)
+		{
+			
+			alert(childNodeArray[i].y);
+			
+				
+			
+			
+		}*/
 		choosingAPiece=false;
 	}
 	
@@ -352,15 +368,15 @@ function drawRect()
 	/*ctx.canvas.width  = window.innerWidth;
   	ctx.canvas.height = window.innerHeight ;*/
 		
-  	alert(document.getElementById('svgOne').getAttribute('height'));
+  	//alert(document.getElementById('svgOne').getAttribute('height'));
   	
   	positions[0][0] = new Rook(colorOfPiece1);
   	positions[0][1] = new Bishop(colorOfPiece1);
   	positions[0][2] = new Knight(colorOfPiece1);
   	positions[0][3] = new Queen(colorOfPiece1);
-  	positions[0][4] = new King(colorOfPiece1);
+  	positions[3][4] = new King(colorOfPiece1);
   	positions[0][5] = new Knight(colorOfPiece1);
-  	positions[0][6] = new Bishop(colorOfPiece1);
+  	positions[3][6] = new Bishop(colorOfPiece1);
   	positions[0][7] = new Rook(colorOfPiece1);
   
   	for (var i=0;i<numberOfSquares;i++)
@@ -388,8 +404,137 @@ function drawRect()
   	console.log(checking);
   	/*myPiece.piece1 = new Image();*/
   	/*myPiece.imageOfPiece.src="bbishop.gif";*/
-  	svgns = "http://www.w3.org/2000/svg";
+  	/*svgns = "http://www.w3.org/2000/svg";
 for (var x = 0; x < numberOfSquares; x++) {
+	
+	if (x % 2 == 0 )
+  	{
+  		
+  		colorOfSqaure=false;
+  		
+  	}else 
+  	{
+  		console.log("red" );
+  		colorOfSquare=true;
+  	}	
+  	console.log('size of square' + sizeOfSquare)
+    for (var y = 0; y < numberOfSquares; y++) {
+    	if (colorOfSquare==true)
+    		{
+    			
+    			var rect = document.createElementNS(svgns, 'rect');
+        		rect.setAttributeNS(null, 'x', Math.floor(x*sizeOfSquare));
+        		rect.setAttributeNS(null, 'y', Math.floor(y*sizeOfSquare));
+        		rect.setAttributeNS(null, 'height', sizeOfSquare);
+        		rect.setAttributeNS(null, 'width', sizeOfSquare);
+        		rect.setAttributeNS(null, 'fill', '#FFFFFF');
+        		//rect.addEventListener("click",function(evt){alert('x'+ evt.screenX +':' +'y' + evt.clientY););
+        		document.getElementById('svgOne').appendChild(rect);
+        		colorOfSquare=false;	
+    	}else
+    	{
+    		var rect = document.createElementNS(svgns, 'rect');
+        	rect.setAttributeNS(null, 'x', Math.floor(x*sizeOfSquare));
+        	rect.setAttributeNS(null, 'y', Math.floor(y*sizeOfSquare));
+        	rect.setAttributeNS(null, 'height', sizeOfSquare);
+        	rect.setAttributeNS(null, 'width', sizeOfSquare);
+        	rect.setAttributeNS(null, 'fill', '#FF0000');
+        	//rect.addEventListener("click",function(evt){alert('x'+ evt.clientX +':' +'y' + evt.clientY););
+        	document.getElementById('svgOne').appendChild(rect);
+        	colorOfSquare=true;	
+    	}
+        
+    }
+    colorOfSquare=false;
+   }
+   for (var numberOfRow=0;numberOfRow<numberOfSquares;numberOfRow++)
+   {
+   		for (var locationInRow=0;locationInRow<numberOfSquares;locationInRow++)
+   		{
+   			if (typeof positions[numberOfRow][locationInRow]!='undefined')
+   			{
+   				console.log("inside drawing pices")
+   				positions[numberOfRow][locationInRow].drawPiece(numberOfRow,locationInRow);
+   				/*var try12 = document.createElementNS(svgns, 'image');
+   
+   				try12.setAttributeNS(null,'x', locationInRow*sizeOfSquare);
+   				try12.setAttributeNS(null,'y', numberOfRow*sizeOfSquare);
+   				try12.setAttributeNS('http://www.w3.org/1999/xlink','href', positions[numberOfRow][locationInRow].imageOfPiece.src);
+   				try12.setAttributeNS(null, 'height', sizeOfSquare);
+   				try12.setAttributeNS(null, 'width', sizeOfSquare);
+   				document.getElementById('svgOne').appendChild(try12);*/
+   				/*
+   			}
+   			
+   		}
+   }
+   
+   //document.getElementById('svgOne').addEventListener("ondragstart",function(evt){xStartDrag=evt.clientX},false);
+ 
+ 	 document.getElementById('svgOne').addEventListener("click",ListenerClick,false);*/
+ 	   //document.getElementById('svgOne').addEventListener("click",ListenerClick,false);
+   
+   
+   drawBoard();
+   
+  /*  for (var numberOfRows=0;numberOfRows<numberOfSquares;numberOfRows++)
+  {
+  	
+  	console.log(numberOfRows%2);
+  	if (numberOfRows % 2 == 0 )
+  	{
+  		console.log("hi "+ numberOfRows % 2);
+  		colorOfSqaure=false;
+  		
+  	}else 
+  	{
+  		console.log("red" );
+  		colorOfSquare=true;
+  	}	
+  	
+  	for (var locationInRow=0;locationInRow<numberOfSquares;locationInRow++)
+  	{
+  		console.log(colorOfSquare);
+  		if (colorOfSquare==true)
+  		{
+  			
+  			ctx.fillStyle="#FF0000";
+  			ctx.fillRect(locationInRow*sizeOfSquare,numberOfRows*sizeOfSquare,sizeOfSquare,sizeOfSquare);
+  			colorOfSquare=false;
+  		}else
+  		{
+  			console.log(locationInRow);
+  			ctx.fillStyle="#000000";
+  			ctx.fillRect(locationInRow*sizeOfSquare,numberOfRows*sizeOfSquare,sizeOfSquare,sizeOfSquare);
+  			colorOfSqaure=true;
+  		}
+  			
+  			
+  		
+  		
+  		
+  	}
+  	colorOfSqaure=false;
+  }*/
+	/*ctx.fillRect(0,0,100,100);
+	ctx.fillRect(100,100,100,100);
+	ctx.fillRect(0,200,100,100);*/
+	
+	
+	
+}
+function drawBoard()
+{
+	svgns = "http://www.w3.org/2000/svg";
+	
+	document.getElementById('svgOne').setAttribute('width', window.innerHeight);
+	document.getElementById('svgOne').setAttribute('height',window.innerHeight);
+	var colorOfSquare= new Boolean();
+	colorOfSquare=false;
+	var colorOfPiece1 = new Boolean();
+	colorOfPiece1=false;
+	alert('drawBoard');
+	for (var x = 0; x < numberOfSquares; x++) {
 	
 	if (x % 2 == 0 )
   	{
@@ -454,54 +599,7 @@ for (var x = 0; x < numberOfSquares; x++) {
    
    //document.getElementById('svgOne').addEventListener("ondragstart",function(evt){xStartDrag=evt.clientX},false);
  
-   document.getElementById('svgOne').addEventListener("click",ListenerClick,false);
-   
-   
-  /*  for (var numberOfRows=0;numberOfRows<numberOfSquares;numberOfRows++)
-  {
-  	
-  	console.log(numberOfRows%2);
-  	if (numberOfRows % 2 == 0 )
-  	{
-  		console.log("hi "+ numberOfRows % 2);
-  		colorOfSqaure=false;
-  		
-  	}else 
-  	{
-  		console.log("red" );
-  		colorOfSquare=true;
-  	}	
-  	
-  	for (var locationInRow=0;locationInRow<numberOfSquares;locationInRow++)
-  	{
-  		console.log(colorOfSquare);
-  		if (colorOfSquare==true)
-  		{
-  			
-  			ctx.fillStyle="#FF0000";
-  			ctx.fillRect(locationInRow*sizeOfSquare,numberOfRows*sizeOfSquare,sizeOfSquare,sizeOfSquare);
-  			colorOfSquare=false;
-  		}else
-  		{
-  			console.log(locationInRow);
-  			ctx.fillStyle="#000000";
-  			ctx.fillRect(locationInRow*sizeOfSquare,numberOfRows*sizeOfSquare,sizeOfSquare,sizeOfSquare);
-  			colorOfSqaure=true;
-  		}
-  			
-  			
-  		
-  		
-  		
-  	}
-  	colorOfSqaure=false;
-  }*/
-	/*ctx.fillRect(0,0,100,100);
-	ctx.fillRect(100,100,100,100);
-	ctx.fillRect(0,200,100,100);*/
-	
-	
-	
+ 	 document.getElementById('svgOne').addEventListener("click",ListenerClick,false);
 }
 
 
