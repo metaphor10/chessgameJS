@@ -15,10 +15,14 @@ function ListenerClick(evt)
 	{
 		xEndDrag=evt.clientX;
 		yEndDrag=evt.clientY;
+		var startX = Math.floor(xStartDrag/sizeOfSquare);
+		var startY = Math.floor(yStartDrag/sizeOfSquare);
+		var endX= Math.floor(xEndDrag/sizeOfSquare);
+		var endY= Math.floor(yEndDrag/sizeOfSquare);
 		alert('startx '+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
-		temp=positions[0][1];
-		positions[0][1]=undefined; 
-		positions[3].splice(1,1, temp);
+		temp=positions[startY][startX];
+		positions[startY][startX]=undefined; 
+		positions[endY].splice(endX,1, temp);
 		drawBoard();
 		
 		
