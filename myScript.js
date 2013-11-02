@@ -458,7 +458,7 @@ Bishop.prototype.canMove = function(x,y)
                 for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
                 {
                         
-                        if (typeof positions[this.diagnolY][this.digonlX]!=undefined)
+                        if ( positions[this.diagnolY][this.digonlX]!=undefined)
                         {                                        
                                         this.isValid=false;                                
                         }
