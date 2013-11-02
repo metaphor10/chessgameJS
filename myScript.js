@@ -144,7 +144,7 @@ function ListenerClick(evt)
 												drawBoard();
                                                
                                                 whosTurnItIs = !positions[possibleMoves[moveToDo].possibleMoveY][possibleMoves[moveToDo].possibleMoveX].isWhite;
-                                                //possibleMoves= new Array();
+                                                possibleMoves.length=0;
                                         }
                                 }
                         //}
@@ -380,7 +380,7 @@ Knight.prototype.canMove = function(x,y)
                 
                 if (this.isValid)
                 {
-                        if (typeof positions[y][x]!=undefined)                                
+                        if ( positions[y][x]!=undefined)                                
                         {
                                 if (this.isWhite==positions[y][x].isWhite)
                                 {
@@ -422,6 +422,7 @@ Bishop.prototype.constructor=Bishop;
 Bishop.prototype.canMove = function(x,y)
 {
 	this.isOccupiedByOppsitPiece=true;
+	this.isValid=false;
 	if (Math.abs(x-(this.locationX)) == Math.abs(y-(this.locationY)))
                 {
                 	console.log('inside Bishop can move dignal'+this.diagnolY+this.digonlX);
@@ -468,7 +469,7 @@ Bishop.prototype.canMove = function(x,y)
                 }
                 console.log('after loop');
                 }
-                if (typeof positions[y][x] != undefined)
+                if ( positions[y][x] != undefined)
                 {
                         if (positions[y][x].isWhite==this.isWhite)
                         {
@@ -512,6 +513,7 @@ Rook.prototype.canMove = function(x,y)
 {
 	var followUp;
 	this.isOccupiedByOppsitPiece=true;
+	this.isValid=false;
 	if (x!=(this.locationX) && y== (this.locationY))
                 {
                         this.isValid=true;
@@ -531,7 +533,7 @@ Rook.prototype.canMove = function(x,y)
                                 }
                                 followUp++;
                         }
-                        if (typeof positions[y][x] !=undefined)
+                        if ( positions[y][x] !=undefined)
                         {
                                 if (positions[y][x].isWhite== this.isWhite)
                                 {
@@ -559,7 +561,7 @@ Rook.prototype.canMove = function(x,y)
                                         }
                                         followUp++;
                                 }
-                                if (typeof positions[y][x] !=undefined)
+                                if ( positions[y][x] !=undefined)
                                 {
                                         if (positions[y][x].isWhite== this.isWhite)
                                         {
@@ -647,7 +649,7 @@ Queen.prototype.canMove = function(x,y)
                                 diagnolY+=dy;
                                 
                         }
-                        if (typeof positions[y][x] != undefined)
+                        if (positions[y][x] != undefined)
                         {
                                 if (positions[y][x].isWhite==this.isWhite)
                                 {
@@ -673,7 +675,7 @@ Queen.prototype.canMove = function(x,y)
                                 }
                                 followUp++;
                         }
-                        if (typeof positions[y][x] !=undefined)
+                        if ( positions[y][x] !=undefined)
                         {
                                 if (positions[y][x].isWhite== this.isWhite)
                                 {
@@ -745,13 +747,14 @@ King.prototype.constructor=King;
 King.prototype.canMove = function(x,y)
 {
 	this.isOccupiedByOppsitPiece=true;
+	this.isValid=false;
 	console.log('is oddumpied'+ this.isOccupiedByOppsitPiece)
 	if (Math.abs(y-(this.locationY))==0 && Math.abs(x-(this.locationX))==1)
                 {
                         this.isValid = true;
                 }else if (Math.abs(y-(this.locationY))==1 && Math.abs(x-(this.locationX))==0)
                         {
-                                this.this.isValid = true;
+                                this.isValid = true;
                         }else if (Math.abs(y-(this.locationY))==1 && Math.abs(x-(this.locationX))==1)
                                 {
                                         this.isValid = true;
