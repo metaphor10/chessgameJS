@@ -1,21 +1,39 @@
 /*https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript */
 
-
+var whosTurnItIs = new Boolean();
+var possibleMoves= new Array();
+function ArtificialInteligence()
+{
+	this.pieceToMoveX;
+	this.pieceToMoveY;
+	this.possibleMoveX;
+	this.possibleMoveY;
+	this.valueOfPiece;
+}
 function ListenerClick(evt)
 {
-	
+	console.log('inside click listner');
+	var moveToDo;
+	var x;
+	var y;
+	var valueOfPiece=0;
+	var temp;
+	var temp1;
+	var endX;
+	var endY;
+	console.log(choosingAPiece);
 	//alert(evt.clientX + ':' + evt.clientY);
 	if (!choosingAPiece)
 	{
 		
 		
-		yStartDrag=evt.clientY;
-		xStartDrag=evt.clientX;
+		yStartDrag=Math.floor(evt.clientY/sizeOfSquare);
+		xStartDrag=Math.floor(evt.clientX/sizeOfSquare);
 		
 		choosingAPiece=true;
 	}else
 	{
-		xEndDrag=evt.clientX;
+		/*xEndDrag=evt.clientX;
 		yEndDrag=evt.clientY;
 		var startX = Math.floor(xStartDrag/sizeOfSquare);
 		var startY = Math.floor(yStartDrag/sizeOfSquare);
@@ -29,7 +47,111 @@ function ListenerClick(evt)
 			positions[endY].splice(endX,1, temp);
 			drawBoard();
 		
-		}
+		}*/
+		xEndDrag=evt.clientX;
+		yEndDrag=evt.clientY;
+		endX= Math.floor(xEndDrag/sizeOfSquare);
+		endY= Math.floor(yEndDrag/sizeOfSquare);
+		console.log('inside place to go');
+		
+		
+		console.log(whosTurnItIs+ "whos turn it is")
+		
+		if (typeof positions[yStartDrag][xStartDrag]!=undefined)
+                {
+                console.log('inside piece place');
+                if (endX!=x || (endY)!= y)
+                {
+                        //if (endX>= 0 && (endX)< numberOfSquares && (endY) >= 0 &&(endY< numberOfSquares))
+                        //{
+                        console.log('inside x or y')
+                        console.log('move from' + xStartDrag + yStartDrag + 'to' + endX+endY)
+                                if (positions[yStartDrag][xStartDrag].isWhite==whosTurnItIs)
+                                {
+                                        if (positions[yStartDrag][xStartDrag].canMove(endX, endY))
+                                        {
+                                                
+                                               /* if (positions[Math.round(evt.clientY/sizeOfSquare)][Math.round(evt.clientX/sizeOfSquare)]!=undefined)
+                                                {
+                                                        valueOfPiece=positions[Math.round(evt.clientY/sizeOfSquare)][Math.round(evt.cloentX/sizeOfSquare)].valueOfPiece;
+                                                }*/
+                                                console.log('swaping ')
+                                                temp = positions[yStartDrag][xStartDrag];
+                                                
+                                               
+												positions[yStartDrag][xStartDrag]=undefined; 
+												console.log('undefined old place')
+												positions[endY].splice(endX,1, temp);
+												
+                                                /*if(valueOfPiece==6)
+                                                {
+                                                        //this is where I would exit if the king was taken
+                                                }*/
+                                                
+                                                whosTurnItIs = !positions[endY][endX].isWhite;
+                                                console.log('now computer')
+                                                drawBoard();
+                                                
+                                                for (var y1 = 0 ;y1<numberOfSquares;y1++)
+                                                {
+                                                        for (var i =0;i<numberOfSquares;i++)
+                                                        {
+                                                                if (positions[y1][i]!=undefined)
+                                                                {
+                                                                        if (positions[y1][i].isWhite==false)
+                                                                        {
+                                                                                for (var j =0;j< numberOfSquares;j++)
+                                                                                {
+                                                                                        for (var u =0; u<numberOfSquares;u++)
+                                                                                        {
+                                                                                                if (positions[y1][i].canMove(u, j))
+                                                                                                {
+                                                                                                        var temp1 = new ArtificialInteligence();
+                                                                                                        if (positions[j][u]!=undefined)
+                                                                                                        {
+                                                                                                                temp1.pieceToMoveX=i;
+                                                                                                                temp1.pieceToMoveY=y1;
+                                                                                                                temp1.possibleMoveX=u;
+                                                                                                                temp1.possibleMoveY=j;
+                                                                                                                temp1.valueOfPiece=positions[j][u].valueOfPiece;
+                                                                                                                
+                                                                                                                
+                                                                                                        }else
+                                                                                                        {
+                                                                                                                temp1.pieceToMoveX=i;
+                                                                                                                temp1.pieceToMoveY=y1;
+                                                                                                                temp1.possibleMoveX=u;
+                                                                                                                temp1.possibleMoveY=j;
+                                                                                                        }
+                                                                                                        possibleMoves.push(temp1);
+                                                                                                        temp1=undefined;
+                                                                                                }
+                                                                                        }
+                                                                                }
+                                                                        }
+                                                                                        
+                                                                }
+                                                        }
+                                                                        
+                                                }
+                                                
+                                                
+                                                moveToDo = Math.floor((Math.random()*(possibleMoves.length)));
+                                                
+                                                var temp2 = positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX];
+                                                positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX]=undefined; 
+												positions[possibleMoves[moveToDo].possibleMoveY].splice(possibleMoves[moveToDo].possibleMoveX,1, temp2);
+												drawBoard();
+                                               
+                                                whosTurnItIs = !positions[possibleMoves[moveToDo].possibleMoveY][possibleMoves[moveToDo].possibleMoveX].isWhite;
+                                                //possibleMoves= new Array();
+                                        }
+                                }
+                        //}
+                }
+                }
+
+
 		
 		
 		
@@ -258,7 +380,7 @@ Knight.prototype.canMove = function(x,y)
                 
                 if (this.isValid)
                 {
-                        if (positions[y][x]!=undefined)                                
+                        if (typeof positions[y][x]!=undefined)                                
                         {
                                 if (this.isWhite==positions[y][x].isWhite)
                                 {
@@ -335,7 +457,7 @@ Bishop.prototype.canMove = function(x,y)
                 for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
                 {
                         
-                        if (positions[this.diagnolY][this.digonlX]!=undefined)
+                        if (typeof positions[this.diagnolY][this.digonlX]!=undefined)
                         {                                        
                                         this.isValid=false;                                
                         }
@@ -346,7 +468,7 @@ Bishop.prototype.canMove = function(x,y)
                 }
                 console.log('after loop');
                 }
-                if (positions[y][x] != undefined)
+                if (typeof positions[y][x] != undefined)
                 {
                         if (positions[y][x].isWhite==this.isWhite)
                         {
@@ -409,7 +531,7 @@ Rook.prototype.canMove = function(x,y)
                                 }
                                 followUp++;
                         }
-                        if (positions[y][x] !=undefined)
+                        if (typeof positions[y][x] !=undefined)
                         {
                                 if (positions[y][x].isWhite== this.isWhite)
                                 {
@@ -420,7 +542,7 @@ Rook.prototype.canMove = function(x,y)
                         
                 }else if (y!=(this.locationY) && x == (this.locationX))
                         {
-                                this.this.isValid=true;
+                                this.isValid=true;
                                 if (y<=this.locationY)
                                 {
                                         followUp=y+1;
@@ -437,7 +559,7 @@ Rook.prototype.canMove = function(x,y)
                                         }
                                         followUp++;
                                 }
-                                if (positions[y][x] !=undefined)
+                                if (typeof positions[y][x] !=undefined)
                                 {
                                         if (positions[y][x].isWhite== this.isWhite)
                                         {
@@ -525,7 +647,7 @@ Queen.prototype.canMove = function(x,y)
                                 diagnolY+=dy;
                                 
                         }
-                        if (positions[y][x] != undefined)
+                        if (typeof positions[y][x] != undefined)
                         {
                                 if (positions[y][x].isWhite==this.isWhite)
                                 {
@@ -551,7 +673,7 @@ Queen.prototype.canMove = function(x,y)
                                 }
                                 followUp++;
                         }
-                        if (positions[y][x] !=undefined)
+                        if (typeof positions[y][x] !=undefined)
                         {
                                 if (positions[y][x].isWhite== this.isWhite)
                                 {
@@ -667,7 +789,7 @@ var xStartDrag;
 
 function drawRect()
 {
-	
+	console.log('inside draw rect');
 	var piecesInitArray= ['Rook','Bishop','knight','Queen','King','Knight','Bishop','Rook'];
 	var colorOfSquare= new Boolean();
 	colorOfSquare=false;
@@ -686,7 +808,7 @@ function drawRect()
   	ctx.canvas.height = window.innerHeight ;*/
 		
   	//alert(document.getElementById('svgOne').getAttribute('height'));
-  	
+  	whosTurnItIs=true;
   	positions[0][0] = new Rook(colorOfPiece1);
   	positions[0][1] = new Bishop(colorOfPiece1);
   	positions[0][2] = new Knight(colorOfPiece1);
