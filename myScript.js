@@ -1,4 +1,6 @@
 /*https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript */
+
+
 function ListenerClick(evt)
 {
 	
@@ -20,10 +22,14 @@ function ListenerClick(evt)
 		var endX= Math.floor(xEndDrag/sizeOfSquare);
 		var endY= Math.floor(yEndDrag/sizeOfSquare);
 		alert('startx '+ Math.floor(xStartDrag/sizeOfSquare) + 'starty ' + Math.floor(yStartDrag/sizeOfSquare) + 'endx ' + Math.floor(xEndDrag/sizeOfSquare) + 'endy ' + Math.floor(yEndDrag/sizeOfSquare));
-		temp=positions[startY][startX];
-		positions[startY][startX]=undefined; 
-		positions[endY].splice(endX,1, temp);
-		drawBoard();
+		if ((positions[startY][startX].canMove(endX,endY))==true)
+		{
+			temp=positions[startY][startX];
+			positions[startY][startX]=undefined; 
+			positions[endY].splice(endX,1, temp);
+			drawBoard();
+		
+		}
 		
 		
 		
@@ -61,7 +67,7 @@ function ListenerDragLeave(evt)
 //document.getElementById('svgOne').setAttribute('height',window.innerHeight);
 var sizeOfSquare;//=document.getElementById('svgOne').getAttribute('height');
 var numberOfSquares=8;
-console.log('after ');
+
 function Piece()
 {
 	this.locationX;
@@ -71,13 +77,16 @@ function Piece()
 	this.isWhite = new Boolean();
 	this.isWhite=true;
 	this.isValid = new Boolean();
+	this.isValid=false;
+	this.isOccupiedByOppsitPiece = new Boolean();
+	this.isOccupiedByOppsitPiece = true;
 	
 	console.log("finished Piece consturctor");
 	
 }
 Piece.prototype.canMove = function(x,y)
 {
-	
+	return;
 };
 Piece.prototype.drawPiece = function(x,y)
 {
@@ -86,8 +95,8 @@ Piece.prototype.drawPiece = function(x,y)
 	
 	var try12 = document.createElementNS(svgns, 'image');
    console.log("after var try12");
-   	try12.setAttributeNS(null,'x', Math.floor(this.locationY*sizeOfSquare));
-   	try12.setAttributeNS(null,'y', Math.floor(this.locationX*sizeOfSquare));
+   	try12.setAttributeNS(null,'x', Math.floor(this.locationX*sizeOfSquare));
+   	try12.setAttributeNS(null,'y', Math.floor(this.locationY*sizeOfSquare));
    	
    	try12.setAttributeNS('http://www.w3.org/1999/xlink','href', this.imageOfPiece.src);
    	try12.setAttributeNS(null, 'height', sizeOfSquare);
@@ -128,14 +137,15 @@ Pawn.prototype = new Piece();
 Pawn.prototype.constructor = Pawn;
 Pawn.prototype.canMove = function(x,y) 
 {
-	
+	console.log('inside can move pawn')
 	this.isValid=false;
 	if (this.isWhite)
         {
-           
-       
-            if (y == ((this.locationY/sizeOfSquare)-2) && x==this.locationX/sizeOfSquare)
+           console.log('inside isWhite');
+       		console.log(this.locationY +' '+  +' '+ y )
+            if (y == (Math.round((this.locationY)-2)) && x==Math.round(this.locationX))
             {
+            	console.log('first move');
                 if (this.firstMove)
                 {
                     if (typeof positions[y][x]=='undefined')
@@ -147,7 +157,7 @@ Pawn.prototype.canMove = function(x,y)
                     }
                 }
            
-            }else if (y == ((this.locationY/sizeOfSquare)-1) && x==this.locationX/sizeOfSquare)
+            }else if (y == ((this.locationY)-1) && x==this.locationX)
             {
                 if (typeof positions[y][x]=='undefined')
                 {
@@ -156,7 +166,7 @@ Pawn.prototype.canMove = function(x,y)
                         this.isValid=true;
                    
                 }
-            }else if(y == ((this.locationY/sizeOfSquare)-1) && Math.abs(x-(this.locationX/sizeOfSquare))==1)
+            }else if(y == ((this.locationY)-1) && Math.abs(x-(this.locationX))==1)
                     {
                         if (typeof positions[y][x]!='undefined')
                         {
@@ -167,9 +177,9 @@ Pawn.prototype.canMove = function(x,y)
                             }
                         }
                     }
-        }else
+        }else // if the piece moving is black
         {
-            if (y == ((this.locationY/sizeOfSquare)+2) && x==this.locationX/sizeOfSquare)
+            if (y == ((this.locationY)+2) && x==this.locationX)
             {
                 if (this.firstMove)
                 {
@@ -182,7 +192,7 @@ Pawn.prototype.canMove = function(x,y)
                     }
                 }
            
-            }else if (y == ((this.locationY/sizeOfSquare)+1) && x==this.locationX/sizeOfSquare)
+            }else if (y == ((this.locationY)+1) && x==this.locationX)
             {
                 if (typeof positions[y][x]=='undefined')
                 {
@@ -191,7 +201,7 @@ Pawn.prototype.canMove = function(x,y)
                         this.isValid=true;
                    
                 }
-            }else if(y == ((this.locationY/sizeOfSquare)+1) && Math.abs(x-(this.locationX/sizeOfSquare))==1)
+            }else if(y == ((this.locationY)+1) && Math.abs(x-(this.locationX))==1)
             {
                 if (typeof positions[y][x]!='undefined')
                 {
@@ -217,7 +227,7 @@ Pawn.prototype.canMove = function(x,y)
 
 function Knight (colorOfPiece){
 	Piece.call(this);
-	console.log("inside Kinght");
+	
     this.isWhite=colorOfPiece;
 	this.locationX;
 	this.locationY;
@@ -233,8 +243,32 @@ function Knight (colorOfPiece){
 }
 Knight.prototype = new Piece();
 Knight.prototype.constructor = Knight;
-Knight.prototype.canMove = function()
+Knight.prototype.canMove = function(x,y)
 {
+	
+	this.isValid = false;
+                if (Math.abs(x-(this.locationX))==1 && Math.abs(y-(this.locationY))==2)
+                {
+                        this.isValid=true;
+                        
+                }else if (Math.abs(y-(this.locationY))==1 && Math.abs(x-(this.locationX))==2)
+                {
+                        this.isValid=true;
+                }
+                
+                if (this.isValid)
+                {
+                        if (positions[y][x]!=undefined)                                
+                        {
+                                if (this.isWhite==positions[y][x].isWhite)
+                                {
+                                        this.isValid=false;
+                                }
+                                
+                        }
+                }
+                
+                return this.isValid;
 	
 }
 /*Knight.prototype.drawPiece =function()
@@ -244,6 +278,10 @@ Knight.prototype.canMove = function()
 
 function Bishop(colorOfPiece){
 	Piece.call(this);
+	this.diagnolY =0;
+	this.digonlX =0;
+	this.dx=1;
+	this.dy=1;
 	this.isWhite=colorOfPiece;
 	this.locationX;
 	this.locationY;
@@ -259,8 +297,71 @@ function Bishop(colorOfPiece){
 }
 Bishop.prototype = new Piece();
 Bishop.prototype.constructor=Bishop;
-Bishop.prototype.canMove = function()
+Bishop.prototype.canMove = function(x,y)
 {
+	this.isOccupiedByOppsitPiece=true;
+	if (Math.abs(x-(this.locationX)) == Math.abs(y-(this.locationY)))
+                {
+                	console.log('inside Bishop can move dignal'+this.diagnolY+this.digonlX);
+                	
+                        this.isValid=true;
+                
+                
+                if (x < (this.locationX))
+                {
+                        
+                        this.digonlX = this.locationX-1;
+                        this.dx=-1;
+                        
+                }else
+                {
+                        
+                        
+                        this.digonlX = (this.locationX)+1;
+                        this.dx=1;
+                }
+                if (y< (this.locationY))
+                {
+                        
+                        this.diagnolY = this.locationY-1;
+                        this.dy=-1;
+                }else
+                {
+                        
+                        this.diagnolY= (this.locationY)+1;
+                        this.dy=1;
+                }
+                console.log('before loop')
+                for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
+                {
+                        
+                        if (positions[this.diagnolY][this.digonlX]!=undefined)
+                        {                                        
+                                        this.isValid=false;                                
+                        }
+                        
+                        this.digonlX+=this.dx;
+                        this.diagnolY+=this.dy;
+                        
+                }
+                console.log('after loop');
+                }
+                if (positions[y][x] != undefined)
+                {
+                        if (positions[y][x].isWhite==this.isWhite)
+                        {
+                                this.isOccupiedByOppsitPiece=false;
+                        }
+                }
+                        
+                console.log('is occupied'+ this.isOccupiedByOppsitPiece + 'is white' + this.isWhite);
+                if (this.isValid && this.isOccupiedByOppsitPiece)
+                {
+                        return true;
+                }else
+                {
+                        return false;
+                }
 	
 }
 /*Bishop.prototype.drawPiece = function()
@@ -285,8 +386,75 @@ function Rook (colorOfPiece){
 }
 Rook.prototype= new Piece();
 Rook.prototype.constructor = Rook;
-Rook.prototype.canMove = function()
+Rook.prototype.canMove = function(x,y)
 {
+	var followUp;
+	this.isOccupiedByOppsitPiece=true;
+	if (x!=(this.locationX) && y== (this.locationY))
+                {
+                        this.isValid=true;
+                        if (x<=this.locationX)
+                        {
+                                followUp=x+1;
+                        }else
+                        {
+                                followUp=(this.locationX)+1;
+                        }
+                        for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
+                        {
+                                if (positions[y][followUp]!=undefined)
+                                {
+                                                                
+                                                this.isValid = false;                                        
+                                }
+                                followUp++;
+                        }
+                        if (positions[y][x] !=undefined)
+                        {
+                                if (positions[y][x].isWhite== this.isWhite)
+                                {
+                                        this.isOccupiedByOppsitPiece = false;
+                                }
+                        }
+                        
+                        
+                }else if (y!=(this.locationY) && x == (this.locationX))
+                        {
+                                this.this.isValid=true;
+                                if (y<=this.locationY)
+                                {
+                                        followUp=y+1;
+                                        
+                                }else
+                                {
+                                        followUp=(this.locationY)+1;
+                                }
+                                for (var i=0;i<Math.abs(y-(this.locationY))-1;i++)
+                                {
+                                        if (positions[followUp][x]!=undefined)
+                                        {
+                                                        this.isValid = false;                                                                                        
+                                        }
+                                        followUp++;
+                                }
+                                if (positions[y][x] !=undefined)
+                                {
+                                        if (positions[y][x].isWhite== this.isWhite)
+                                        {
+                                                this.isOccupiedByOppsitPiece = false;
+                                        }
+                                }
+                                
+                                
+                        }
+                
+                if (this.isValid&&this.isOccupiedByOppsitPiece)
+                {
+                        return true;
+                }else
+                {
+                        return false;
+                }
 	
 }
 /*Rook.prototype.drawPiece = function()
@@ -311,8 +479,123 @@ function Queen (colorOfPiece){
 }
 Queen.prototype = new Piece();
 Queen.prototype.constructor=Queen;
-Queen.prototype.canMove = function()
+Queen.prototype.canMove = function(x,y)
 {
+	var followUp;
+	var digonlX;
+	var diagnolY;
+	var dx=1;
+	var dy=1;
+	this.isOccupiedByOppsitPiece = true;
+                this.isValid = false;
+                if (Math.abs(x-(this.locationX)) == Math.abs(y-(this.locationY)))
+                {
+                        this.isValid=true;
+                        if (x <= (this.locationX))
+                        {
+                                
+                                digonlX = this.locationX-1;
+                                dx=-1;
+                                
+                        }else
+                        {
+                                
+                                
+                                digonlX = (this.locationX)+1;
+                        }
+                        if (y<=(this.locationY))
+                        {
+                                
+                                diagnolY = this.locationY-1;
+                                dy=-1;
+                        }else
+                        {
+                                
+                                diagnolY= (this.locationY)+1;
+                        }
+                        for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
+                        {
+                                
+                                if (positions[diagnolY][digonlX]!=undefined)
+                                {                                        
+                                                this.isValid=false;                                
+                                }
+                                
+                                digonlX+=dx;
+                                diagnolY+=dy;
+                                
+                        }
+                        if (positions[y][x] != undefined)
+                        {
+                                if (positions[y][x].isWhite==this.isWhite)
+                                {
+                                        this.isOccupiedByOppsitPiece=false;
+                                }
+                        }
+                }else if (x!=(this.locationX) && y== (this.locationY))
+                                {
+                        this.isValid=true;
+                        if (x<=this.locationX)
+                        {
+                                followUp=x+1;
+                        }else
+                        {
+                                followUp=(this.locationX)+1;
+                        }
+                        for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
+                        {
+                                if (positions[y][followUp]!=undefined)
+                                {
+                                                                
+                                                this.isValid = false;                                        
+                                }
+                                followUp++;
+                        }
+                        if (positions[y][x] !=undefined)
+                        {
+                                if (positions[y][x].isWhite== this.isWhite)
+                                {
+                                        this.isOccupiedByOppsitPiece = false;
+                                }
+                        }
+                        
+                                }else if (y!=(this.locationY) && x == (this.locationX))
+                                        {
+                                        this.isValid=true;
+                                        if (y<=this.locationY)
+                                        {
+                                                followUp=y+1;
+                                                
+                                        }else
+                                        {
+                                                followUp=(this.locationY)+1;
+                                        }
+                                        for (var i=0;i<Math.abs(y-(this.locationY))-1;i++)
+                                        {
+                                                if (positions[followUp][x]!=undefined)
+                                                {
+                                                                this.isValid = false;                                                                                        
+                                                }
+                                                followUp++;
+                                        }
+                                        if (positions[y][x] !=undefined)
+                                        {
+                                                if (positions[y][x].isWhite== this.isWhite)
+                                                {
+                                                        this.isOccupiedByOppsitPiece = false;
+                                                }
+                                        }
+                                        
+                                        }
+                
+              
+                if(this.isValid&&this.isOccupiedByOppsitPiece)
+                {
+                        return true;
+                }else
+                {
+                        return false;
+                }
 	
 }
 /*Queen.prototype.drawPiece = function  () {
@@ -337,9 +620,39 @@ function King (colorOfPiece)
 }
 King.prototype = new Piece();
 King.prototype.constructor=King;
-King.prototype.canMove = function()
+King.prototype.canMove = function(x,y)
 {
-	
+	this.isOccupiedByOppsitPiece=true;
+	console.log('is oddumpied'+ this.isOccupiedByOppsitPiece)
+	if (Math.abs(y-(this.locationY))==0 && Math.abs(x-(this.locationX))==1)
+                {
+                        this.isValid = true;
+                }else if (Math.abs(y-(this.locationY))==1 && Math.abs(x-(this.locationX))==0)
+                        {
+                                this.this.isValid = true;
+                        }else if (Math.abs(y-(this.locationY))==1 && Math.abs(x-(this.locationX))==1)
+                                {
+                                        this.isValid = true;
+                                }
+                
+                if (positions[y][x] !=undefined)
+                {
+                        if(positions[y][x].isWhite==this.isWhite)
+                        {
+                                this.isOccupiedByOppsitPiece = false;
+                        }
+                }
+                
+                
+                
+                
+                if (this.isValid&&this.isOccupiedByOppsitPiece)
+                {
+                        return true;
+                }else
+                {
+                        return false;
+                }
 }/*
 King.prototype.drawPiece = function()
 {
@@ -354,7 +667,7 @@ var xStartDrag;
 
 function drawRect()
 {
-	console.log("first step");
+	
 	var piecesInitArray= ['Rook','Bishop','knight','Queen','King','Knight','Bishop','Rook'];
 	var colorOfSquare= new Boolean();
 	colorOfSquare=false;
@@ -366,7 +679,7 @@ function drawRect()
 	
 	
 	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height'))/(numberOfSquares));
-	console.log(sizeOfSquare);
+	
 	/*var c=document.getElementById("svgOne");
 	var ctx=c.getContext("2d");*/
 	/*ctx.canvas.width  = window.innerWidth;
@@ -378,9 +691,9 @@ function drawRect()
   	positions[0][1] = new Bishop(colorOfPiece1);
   	positions[0][2] = new Knight(colorOfPiece1);
   	positions[0][3] = new Queen(colorOfPiece1);
-  	positions[3][4] = new King(colorOfPiece1);
+  	positions[0][4] = new King(colorOfPiece1);
   	positions[0][5] = new Knight(colorOfPiece1);
-  	positions[3][6] = new Bishop(colorOfPiece1);
+  	positions[0][6] = new Bishop(colorOfPiece1);
   	positions[0][7] = new Rook(colorOfPiece1);
   
   	for (var i=0;i<numberOfSquares;i++)
@@ -400,12 +713,12 @@ function drawRect()
   	positions[7][6] = new Bishop(!colorOfPiece1);
   	positions[7][7] = new Rook(!colorOfPiece1);
   	
-  	console.log("class instance");
   	
-  	console.log (positions[0][0]);
   	
-  	var checking = positions[6][0].canMove(0,4);
-  	console.log(checking);
+  	
+  	
+  	
+  	
   	/*myPiece.piece1 = new Image();*/
   	/*myPiece.imageOfPiece.src="bbishop.gif";*/
   	/*svgns = "http://www.w3.org/2000/svg";
@@ -538,20 +851,20 @@ function drawBoard()
 	var colorOfPiece1 = new Boolean();
 	colorOfPiece1=false;
 	alert('drawBoard');
-	for (var x = 0; x < numberOfSquares; x++) {
+	for (var y = 0; y < numberOfSquares; y++) {
 	
-	if (x % 2 == 0 )
+	if (y % 2 == 0 )
   	{
   		
   		colorOfSqaure=false;
   		
   	}else 
   	{
-  		console.log("red" );
+  		
   		colorOfSquare=true;
   	}	
-  	console.log('size of square' + sizeOfSquare)
-    for (var y = 0; y < numberOfSquares; y++) {
+  	
+    for (var x = 0; x < numberOfSquares; x++) {
     	if (colorOfSquare==true)
     		{
     			
@@ -586,8 +899,8 @@ function drawBoard()
    		{
    			if (typeof positions[numberOfRow][locationInRow]!='undefined')
    			{
-   				console.log("inside drawing pices")
-   				positions[numberOfRow][locationInRow].drawPiece(numberOfRow,locationInRow);
+   				
+   				 positions[numberOfRow][locationInRow].drawPiece(locationInRow,numberOfRow);
    				/*var try12 = document.createElementNS(svgns, 'image');
    
    				try12.setAttributeNS(null,'x', locationInRow*sizeOfSquare);
