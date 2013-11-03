@@ -21,7 +21,8 @@ function ListenerClick(evt)
 	var temp1;
 	var endX;
 	var endY;
-	console.log(choosingAPiece);
+	
+	
 	//alert(evt.clientX + ':' + evt.clientY);
 	if (!choosingAPiece)
 	{
@@ -29,8 +30,12 @@ function ListenerClick(evt)
 		
 		yStartDrag=Math.floor(evt.clientY/sizeOfSquare);
 		xStartDrag=Math.floor(evt.clientX/sizeOfSquare);
+		if (positions[yStartDrag][xStartDrag]!=undefined)
+		{
+			choosingAPiece=true;
+		}
 		
-		choosingAPiece=true;
+		
 	}else
 	{
 		/*xEndDrag=evt.clientX;
@@ -52,20 +57,26 @@ function ListenerClick(evt)
 		yEndDrag=evt.clientY;
 		endX= Math.floor(xEndDrag/sizeOfSquare);
 		endY= Math.floor(yEndDrag/sizeOfSquare);
-		console.log('inside place to go');
+		
+		if (whosTurnItIs)
+		{
+			document.getElementById("demo").innerHTML="White";
+		}else
+		{
+			document.getElementById("demo").innerHTML="Black";
+		}
 		
 		
-		console.log(whosTurnItIs+ "whos turn it is")
 		
-		if (typeof positions[yStartDrag][xStartDrag]!=undefined)
+		if ( positions[yStartDrag][xStartDrag]!=undefined)
                 {
                 console.log('inside piece place');
                 if (endX!=x || (endY)!= y)
                 {
                         //if (endX>= 0 && (endX)< numberOfSquares && (endY) >= 0 &&(endY< numberOfSquares))
                         //{
-                        console.log('inside x or y')
-                        console.log('move from' + xStartDrag + yStartDrag + 'to' + endX+endY)
+                        
+                       
                                 if (positions[yStartDrag][xStartDrag].isWhite==whosTurnItIs)
                                 {
                                         if (positions[yStartDrag][xStartDrag].canMove(endX, endY))
@@ -75,12 +86,12 @@ function ListenerClick(evt)
                                                 {
                                                         valueOfPiece=positions[Math.round(evt.clientY/sizeOfSquare)][Math.round(evt.cloentX/sizeOfSquare)].valueOfPiece;
                                                 }*/
-                                                console.log('swaping ')
+                                                
                                                 temp = positions[yStartDrag][xStartDrag];
                                                 
                                                
 												positions[yStartDrag][xStartDrag]=undefined; 
-												console.log('undefined old place')
+												
 												positions[endY].splice(endX,1, temp);
 												
                                                 /*if(valueOfPiece==6)
@@ -89,9 +100,20 @@ function ListenerClick(evt)
                                                 }*/
                                                 
                                                 whosTurnItIs = !positions[endY][endX].isWhite;
-                                                console.log('now computer')
-                                                drawBoard();
                                                 
+                                                
+                                                drawBoard();
+                                              	if (whosTurnItIs)
+												{
+													document.getElementById("demo").innerHTML="White";
+												}else
+												{
+													document.getElementById("demo").innerHTML="Black";
+												}
+												for (var delayTime=0;delayTime<1000000000;delayTime++)
+												{
+													
+												}
                                                 for (var y1 = 0 ;y1<numberOfSquares;y1++)
                                                 {
                                                         for (var i =0;i<numberOfSquares;i++)
@@ -144,12 +166,28 @@ function ListenerClick(evt)
 												drawBoard();
                                                
                                                 whosTurnItIs = !positions[possibleMoves[moveToDo].possibleMoveY][possibleMoves[moveToDo].possibleMoveX].isWhite;
+                                               	if (whosTurnItIs)
+												{
+													document.getElementById("demo").innerHTML="White";
+												}else
+												{
+													document.getElementById("demo").innerHTML="Black";
+												}
                                                 possibleMoves.length=0;
                                         }
                                 }
                         //}
                 }
-                }
+                choosingAPiece=false;
+                }else
+                {
+                	
+                	choosingAPiece=true;
+                	whosTurnItIs=false;
+;                }
+                
+                
+                
 
 
 		
@@ -164,7 +202,7 @@ function ListenerClick(evt)
 			
 			
 		}*/
-		choosingAPiece=false;
+		
 	}
 	
 	
@@ -203,7 +241,7 @@ function Piece()
 	this.isOccupiedByOppsitPiece = new Boolean();
 	this.isOccupiedByOppsitPiece = true;
 	
-	console.log("finished Piece consturctor");
+	
 	
 }
 Piece.prototype.canMove = function(x,y)
@@ -259,7 +297,7 @@ Pawn.prototype = new Piece();
 Pawn.prototype.constructor = Pawn;
 Pawn.prototype.canMove = function(x,y) 
 {
-	console.log('inside can move pawn')
+	
 	this.isValid=false;
 	if (this.isWhite)
         {
@@ -338,7 +376,7 @@ Pawn.prototype.canMove = function(x,y)
             }
         }	
         return this.isValid;
-	console.log("inside pawn canMove");
+	
 };
 /*Pawn.prototype.drawPiece = function(x,y) 
 {
@@ -454,7 +492,7 @@ Bishop.prototype.canMove = function(x,y)
                         this.diagnolY= (this.locationY)+1;
                         this.dy=1;
                 }
-                console.log('before loop')
+                
                 for (var i=0;i<Math.abs(x-(this.locationX))-1;i++)
                 {
                         
@@ -467,7 +505,7 @@ Bishop.prototype.canMove = function(x,y)
                         this.diagnolY+=this.dy;
                         
                 }
-                console.log('after loop');
+                
                 }
                 if ( positions[y][x] != undefined)
                 {
@@ -477,7 +515,7 @@ Bishop.prototype.canMove = function(x,y)
                         }
                 }
                         
-                console.log('is occupied'+ this.isOccupiedByOppsitPiece + 'is white' + this.isWhite);
+                
                 if (this.isValid && this.isOccupiedByOppsitPiece)
                 {
                         return true;
@@ -792,7 +830,8 @@ var xStartDrag;
 
 function drawRect()
 {
-	console.log('inside draw rect');
+	
+
 	var piecesInitArray= ['Rook','Bishop','knight','Queen','King','Knight','Bishop','Rook'];
 	var colorOfSquare= new Boolean();
 	colorOfSquare=false;
@@ -800,7 +839,9 @@ function drawRect()
 	colorOfPiece1=false;
 	document.getElementById('svgOne').setAttribute('width', window.innerHeight);
 	document.getElementById('svgOne').setAttribute('height',window.innerHeight);
-	
+	document.getElementById('demo').style.position="absolute";
+	document.getElementById('demo').style.top="0px";
+	document.getElementById('demo').style.left="1000px";
 	
 	
 	sizeOfSquare=Math.floor((document.getElementById('svgOne').getAttribute('height'))/(numberOfSquares));
@@ -813,12 +854,12 @@ function drawRect()
   	//alert(document.getElementById('svgOne').getAttribute('height'));
   	whosTurnItIs=true;
   	positions[0][0] = new Rook(colorOfPiece1);
-  	positions[0][1] = new Bishop(colorOfPiece1);
-  	positions[0][2] = new Knight(colorOfPiece1);
+  	positions[0][1] = new Knight(colorOfPiece1);
+  	positions[0][2] = new Bishop(colorOfPiece1);
   	positions[0][3] = new Queen(colorOfPiece1);
   	positions[0][4] = new King(colorOfPiece1);
-  	positions[0][5] = new Knight(colorOfPiece1);
-  	positions[0][6] = new Bishop(colorOfPiece1);
+  	positions[0][5] = new Bishop(colorOfPiece1);
+  	positions[0][6] = new Knight(colorOfPiece1);
   	positions[0][7] = new Rook(colorOfPiece1);
   
   	for (var i=0;i<numberOfSquares;i++)
@@ -830,12 +871,12 @@ function drawRect()
   		positions[6][i] = new Pawn (!colorOfPiece1);
   	}
   	positions[7][0] = new Rook(!colorOfPiece1);
-  	positions[7][1] = new Bishop(!colorOfPiece1);
-  	positions[7][2] = new Knight(!colorOfPiece1);
+  	positions[7][1] = new Knight(!colorOfPiece1);
+  	positions[7][2] = new Bishop(!colorOfPiece1);
   	positions[7][3] = new Queen(!colorOfPiece1);
   	positions[7][4] = new King(!colorOfPiece1);
-  	positions[7][5] = new Knight(!colorOfPiece1);
-  	positions[7][6] = new Bishop(!colorOfPiece1);
+  	positions[7][5] = new Bishop(!colorOfPiece1);
+  	positions[7][6] = new Knight(!colorOfPiece1);
   	positions[7][7] = new Rook(!colorOfPiece1);
   	
   	
@@ -967,6 +1008,7 @@ for (var x = 0; x < numberOfSquares; x++) {
 }
 function drawBoard()
 {
+	
 	svgns = "http://www.w3.org/2000/svg";
 	
 	document.getElementById('svgOne').setAttribute('width', window.innerHeight);
@@ -975,7 +1017,7 @@ function drawBoard()
 	colorOfSquare=false;
 	var colorOfPiece1 = new Boolean();
 	colorOfPiece1=false;
-	alert('drawBoard');
+	
 	for (var y = 0; y < numberOfSquares; y++) {
 	
 	if (y % 2 == 0 )
