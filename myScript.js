@@ -58,15 +58,9 @@ function ListenerClick(evt)
 		endX= Math.floor(xEndDrag/sizeOfSquare);
 		endY= Math.floor(yEndDrag/sizeOfSquare);
 		
-		if (whosTurnItIs)
-		{
-			document.getElementById("demo").innerHTML="White";
-		}else
-		{
-			document.getElementById("demo").innerHTML="Black";
-		}
 		
 		
+		drawBoard();
 		
 		if ( positions[yStartDrag][xStartDrag]!=undefined)
                 {
@@ -103,6 +97,7 @@ function ListenerClick(evt)
                                                 
                                                 
                                                 drawBoard();
+                                                /*
                                               	if (whosTurnItIs)
 												{
 													document.getElementById("demo").innerHTML="White";
@@ -110,10 +105,7 @@ function ListenerClick(evt)
 												{
 													document.getElementById("demo").innerHTML="Black";
 												}
-												for (var delayTime=0;delayTime<1000000000;delayTime++)
-												{
-													
-												}
+												
                                                 for (var y1 = 0 ;y1<numberOfSquares;y1++)
                                                 {
                                                         for (var i =0;i<numberOfSquares;i++)
@@ -163,6 +155,9 @@ function ListenerClick(evt)
                                                 var temp2 = positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX];
                                                 positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX]=undefined; 
 												positions[possibleMoves[moveToDo].possibleMoveY].splice(possibleMoves[moveToDo].possibleMoveX,1, temp2);
+												
+												
+												
 												drawBoard();
                                                
                                                 whosTurnItIs = !positions[possibleMoves[moveToDo].possibleMoveY][possibleMoves[moveToDo].possibleMoveX].isWhite;
@@ -174,6 +169,18 @@ function ListenerClick(evt)
 													document.getElementById("demo").innerHTML="Black";
 												}
                                                 possibleMoves.length=0;
+                                                */
+                                               if (whosTurnItIs)
+												{
+													document.getElementById("demo").innerHTML="White";
+												}else
+												{
+													document.getElementById("demo").innerHTML="Black";
+												}
+												
+												drawBoard();
+												
+                                               setTimeout("AI()",3000);
                                         }
                                 }
                         //}
@@ -1093,6 +1100,74 @@ function  myFunction()
 	document.getElementById("demo").innerHTML="change is good";
 	
 	
+}
+function AI()
+{
+	var moveToDo;
+    for (var y1 = 0 ;y1<numberOfSquares;y1++)
+    {
+            for (var i =0;i<numberOfSquares;i++)
+            {
+                    if (positions[y1][i]!=undefined)
+                    {
+                            if (positions[y1][i].isWhite==false)
+                            {
+                                    for (var j =0;j< numberOfSquares;j++)
+                                    {
+                                            for (var u =0; u<numberOfSquares;u++)
+                                            {
+                                                    if (positions[y1][i].canMove(u, j))
+                                                    {
+                                                            var temp1 = new ArtificialInteligence();
+                                                            if (positions[j][u]!=undefined)
+                                                            {
+                                                                    temp1.pieceToMoveX=i;
+                                                                    temp1.pieceToMoveY=y1;
+                                                                    temp1.possibleMoveX=u;
+                                                                    temp1.possibleMoveY=j;
+                                                                    temp1.valueOfPiece=positions[j][u].valueOfPiece;
+                                                                    
+                                                                    
+                                                            }else
+                                                            {
+                                                                    temp1.pieceToMoveX=i;
+                                                                    temp1.pieceToMoveY=y1;
+                                                                    temp1.possibleMoveX=u;
+                                                                    temp1.possibleMoveY=j;
+                                                            }
+                                                            possibleMoves.push(temp1);
+                                                            temp1=undefined;
+                                                    }
+                                            }
+                                    }
+                            }
+                                            
+                    }
+            }
+                            
+    }
+    
+    
+    moveToDo = Math.floor((Math.random()*(possibleMoves.length)));
+    
+    var temp2 = positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX];
+    positions[possibleMoves[moveToDo].pieceToMoveY][possibleMoves[moveToDo].pieceToMoveX]=undefined; 
+	positions[possibleMoves[moveToDo].possibleMoveY].splice(possibleMoves[moveToDo].possibleMoveX,1, temp2);
+	
+	
+	whosTurnItIs = !positions[possibleMoves[moveToDo].possibleMoveY][possibleMoves[moveToDo].possibleMoveX].isWhite;
+   	if (whosTurnItIs)
+	{
+		document.getElementById("demo").innerHTML="Your turn computer has moved";
+	}else
+	{
+		document.getElementById("demo").innerHTML="Black";
+	}
+	drawBoard();
+   
+    
+    possibleMoves.length=0;
+
 }
 
 
