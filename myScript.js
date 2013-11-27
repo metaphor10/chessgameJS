@@ -250,6 +250,7 @@ function Piece()
 	
 	
 	
+	
 }
 Piece.prototype.canMove = function(x,y)
 {
